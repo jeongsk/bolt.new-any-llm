@@ -1,5 +1,7 @@
-// @ts-nocheck
-// Preventing TS checks with files presented in the video for a better presentation.
+/*
+ * @ts-nocheck
+ * Preventing TS checks with files presented in the video for a better presentation.
+ */
 import { env } from 'node:process';
 
 export function getAPIKey(cloudflareEnv: Env, provider: string) {
@@ -20,6 +22,6 @@ export function getAPIKey(cloudflareEnv: Env, provider: string) {
     case 'OpenRouter':
       return env.OPEN_ROUTER_API_KEY || cloudflareEnv.OPEN_ROUTER_API_KEY;
     default:
-      return "";
+      return '';
   }
 }

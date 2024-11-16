@@ -289,6 +289,7 @@ export class WorkbenchStore {
         // If there's more than one segment, we need to create folders
         if (pathSegments.length > 1) {
           let currentFolder = zip;
+
           for (let i = 0; i < pathSegments.length - 1; i++) {
             currentFolder = currentFolder.folder(pathSegments[i])!;
           }

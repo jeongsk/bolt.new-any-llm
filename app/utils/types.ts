@@ -1,4 +1,3 @@
-
 interface OllamaModelDetails {
   parent_model: string;
   format: string;
