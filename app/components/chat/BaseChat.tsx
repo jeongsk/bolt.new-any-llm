@@ -18,11 +18,11 @@ import styles from './BaseChat.module.scss';
 import type { ModelInfo } from '~/utils/types';
 
 const EXAMPLE_PROMPTS = [
-  { text: 'Build a todo app in React using Tailwind' },
-  { text: 'Build a simple blog using Astro' },
-  { text: 'Create a cookie consent form using Material UI' },
-  { text: 'Make a space invaders game' },
-  { text: 'How do I center a div?' },
+  { text: 'React와 Tailwind를 사용하여 할 일 앱 만들기' },
+  { text: 'Astro를 사용하여 간단한 블로그 만들기' },
+  { text: 'Material UI를 사용하여 쿠키 동의 양식 만들기' },
+  { text: '스페이스 인베이더 게임 만들기' },
+  { text: 'div를 가운데 정렬하는 방법' },
 ];
 
 const providerList = [...new Set(MODEL_LIST.map((model) => model.provider))];
@@ -134,10 +134,10 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
             {!chatStarted && (
               <div id="intro" className="mt-[26vh] max-w-chat mx-auto">
                 <h1 className="text-5xl text-center font-bold text-bolt-elements-textPrimary mb-2">
-                  Where ideas begin
+                  아이디어가 시작되는 곳
                 </h1>
                 <p className="mb-4 text-center text-bolt-elements-textSecondary">
-                  Bring ideas to life in seconds or get help on existing projects.
+                  몇 초 만에 아이디어를 실현하거나 기존 프로젝트에 대한 도움을 받으세요.
                 </p>
               </div>
             )}
@@ -191,7 +191,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       minHeight: TEXTAREA_MIN_HEIGHT,
                       maxHeight: TEXTAREA_MAX_HEIGHT,
                     }}
-                    placeholder="How can Bolt help you today?"
+                    placeholder="Bolt가 오늘 어떻게 도와드릴까요?"
                     translate="no"
                   />
                   <ClientOnly>
@@ -225,19 +225,19 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                         {enhancingPrompt ? (
                           <>
                             <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-xl"></div>
-                            <div className="ml-1.5">Enhancing prompt...</div>
+                            <div className="ml-1.5">프롬프트 개선 중...</div>
                           </>
                         ) : (
                           <>
                             <div className="i-bolt:stars text-xl"></div>
-                            {promptEnhanced && <div className="ml-1.5">Prompt enhanced</div>}
+                            {promptEnhanced && <div className="ml-1.5">프롬프트가 개선되었습니다</div>}
                           </>
                         )}
                       </IconButton>
                     </div>
                     {input.length > 3 ? (
                       <div className="text-xs text-bolt-elements-textTertiary">
-                        Use <kbd className="kdb">Shift</kbd> + <kbd className="kdb">Return</kbd> for a new line
+                        새 줄을 입력하려면 <kbd className="kdb">Shift</kbd> + <kbd className="kdb">Return</kbd>을 사용하세요
                       </div>
                     ) : null}
                   </div>
