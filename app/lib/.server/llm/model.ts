@@ -2,7 +2,7 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
-import { getAPIKey, getLaaSProject } from '~/lib/.server/llm/api-key';
+import { getAPIKey } from '~/lib/.server/llm/api-key';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createGroq } from '@ai-sdk/groq';
@@ -46,14 +46,15 @@ export function getOpenRouterModel(apiKey: string, model: string) {
   return openRouter.chat(model);
 }
 
-export function getLaaSModel(apiKey: string, project: string, hash: string, model: string) {
+export function getLaaSModel(apiKey: string, model: string) {
+  const hash = '6b78a481bff4eaea68c393303b2a0dbd2b7bbdb6b5f52b143a4ec6bca4ba9a86';
   const openai = createOpenAI({
     apiKey,
     baseURL: 'https://api-laas.wanted.co.kr/api/preset/v2/',
     headers: {
       'Content-Type': 'application/json',
+      project: 'BOLT_NEW',
       apiKey,
-      project,
     },
     fetch: (input: RequestInfo | URL, init?: RequestInit) => {
       const url = input instanceof URL ? input.toString() : input;
@@ -66,7 +67,6 @@ export function getLaaSModel(apiKey: string, project: string, hash: string, mode
 
       return window.fetch(url, {
         ...init,
-        headers: { ...init?.headers, project },
         body: modifiedBody,
       });
     },
@@ -90,7 +90,7 @@ export function getModel(provider: string, model: string, env: Env) {
     case 'Google':
       return getGoogleModel(apiKey, model);
     case 'LaaS':
-      return getLaaSModel(apiKey, getLaaSProject(env), 'test', model);
+      return getLaaSModel(apiKey, model);
     default:
       return getOllamaModel(model);
   }

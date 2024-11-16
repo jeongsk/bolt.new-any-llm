@@ -237,7 +237,8 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                     </div>
                     {input.length > 3 ? (
                       <div className="text-xs text-bolt-elements-textTertiary">
-                        새 줄을 입력하려면 <kbd className="kdb">Shift</kbd> + <kbd className="kdb">Return</kbd>을 사용하세요
+                        새 줄을 입력하려면 <kbd className="kdb">Shift</kbd> + <kbd className="kdb">Return</kbd>을
+                        사용하세요
                       </div>
                     ) : null}
                   </div>
