@@ -1,11 +1,13 @@
-// @ts-nocheck
-// Preventing TS checks with files presented in the video for a better presentation.
-import { getAPIKey } from '~/lib/.server/llm/api-key';
+/*
+ * @ts-nocheck
+ * Preventing TS checks with files presented in the video for a better presentation.
+ */
+import { getAPIKey, getLaaSProject } from '~/lib/.server/llm/api-key';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { ollama } from 'ollama-ai-provider';
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 
 export function getAnthropicModel(apiKey: string, model: string) {
   const anthropic = createAnthropic({
@@ -24,9 +26,7 @@ export function getOpenAIModel(apiKey: string, model: string) {
 }
 
 export function getGoogleModel(apiKey: string, model: string) {
-  const google = createGoogleGenerativeAI(
-    apiKey,
-  );
+  const google = createGoogleGenerativeAI(apiKey);
 
   return google(model);
 }
@@ -46,15 +46,28 @@ export function getOllamaModel(model: string) {
 
 export function getOpenRouterModel(apiKey: string, model: string) {
   const openRouter = createOpenRouter({
-    apiKey
+    apiKey,
   });
 
   return openRouter.chat(model);
 }
 
+export function getLaaSModel(apiKey: string, project: string, model: string) {
+  const openai = createOpenAI({
+    apiKey,
+    baseURL: 'https://api-laas.wanted.co.kr/api/preset/v2/',
+    headers: {
+      'Content-Type': 'application/json',
+      apiKey,
+      project,
+    },
+  });
+
+  return openai(model);
+}
+
 export function getModel(provider: string, model: string, env: Env) {
   const apiKey = getAPIKey(env, provider);
-
 
   switch (provider) {
     case 'Anthropic':
@@ -66,7 +79,9 @@ export function getModel(provider: string, model: string, env: Env) {
     case 'OpenRouter':
       return getOpenRouterModel(apiKey, model);
     case 'Google':
-      return getGoogleModel(apiKey, model)
+      return getGoogleModel(apiKey, model);
+    case 'LaaS':
+      return getLaaSModel(apiKey, getLaaSProject(env), model);
     default:
       return getOllamaModel(model);
   }

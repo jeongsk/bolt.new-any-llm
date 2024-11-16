@@ -4,6 +4,10 @@
  */
 import { env } from 'node:process';
 
+export function getLaaSProject(cloudflareEnv: Env) {
+  return env.LAAS_PROJECT || cloudflareEnv.LAAS_PROJECT;
+}
+
 export function getAPIKey(cloudflareEnv: Env, provider: string) {
   /**
    * The `cloudflareEnv` is only used when deployed or when previewing locally.
