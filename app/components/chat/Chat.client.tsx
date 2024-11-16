@@ -75,7 +75,7 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [chatStarted, setChatStarted] = useState(initialMessages.length > 0);
-  const [model, setModel] = useState(DEFAULT_MODEL);
+  const [model] = useState(DEFAULT_MODEL);
 
   const { showChat } = useStore(chatStore);
 
@@ -215,8 +215,6 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
       enhancingPrompt={enhancingPrompt}
       promptEnhanced={promptEnhanced}
       sendMessage={sendMessage}
-      model={model}
-      setModel={setModel}
       messageRef={messageRef}
       scrollRef={scrollRef}
       handleInputChange={handleInputChange}
