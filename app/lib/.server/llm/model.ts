@@ -5,6 +5,7 @@
 import { getAPIKey, getLaaSProject } from '~/lib/.server/llm/api-key';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenAI } from '@ai-sdk/openai';
+import { createGroq } from '@ai-sdk/groq';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { ollama } from 'ollama-ai-provider';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
@@ -18,24 +19,19 @@ export function getAnthropicModel(apiKey: string, model: string) {
 }
 
 export function getOpenAIModel(apiKey: string, model: string) {
-  const openai = createOpenAI({
-    apiKey,
-  });
+  const openai = createOpenAI({ apiKey });
 
   return openai(model);
 }
 
 export function getGoogleModel(apiKey: string, model: string) {
-  const google = createGoogleGenerativeAI(apiKey);
+  const google = createGoogleGenerativeAI({ apiKey });
 
   return google(model);
 }
 
 export function getGroqModel(apiKey: string, model: string) {
-  const openai = createOpenAI({
-    baseURL: 'https://api.groq.com/openai/v1',
-    apiKey,
-  });
+  const openai = createGroq({ apiKey });
 
   return openai(model);
 }
@@ -45,9 +41,7 @@ export function getOllamaModel(model: string) {
 }
 
 export function getOpenRouterModel(apiKey: string, model: string) {
-  const openRouter = createOpenRouter({
-    apiKey,
-  });
+  const openRouter = createOpenRouter({ apiKey  });
 
   return openRouter.chat(model);
 }
