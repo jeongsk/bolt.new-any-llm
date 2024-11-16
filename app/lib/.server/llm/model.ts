@@ -41,12 +41,12 @@ export function getOllamaModel(model: string) {
 }
 
 export function getOpenRouterModel(apiKey: string, model: string) {
-  const openRouter = createOpenRouter({ apiKey  });
+  const openRouter = createOpenRouter({ apiKey });
 
   return openRouter.chat(model);
 }
 
-export function getLaaSModel(apiKey: string, project: string, model: string) {
+export function getLaaSModel(apiKey: string, project: string, hash: string, model: string) {
   const openai = createOpenAI({
     apiKey,
     baseURL: 'https://api-laas.wanted.co.kr/api/preset/v2/',
@@ -54,6 +54,21 @@ export function getLaaSModel(apiKey: string, project: string, model: string) {
       'Content-Type': 'application/json',
       apiKey,
       project,
+    },
+    fetch: (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = input instanceof URL ? input.toString() : input;
+
+      const modifiedBody = init?.body
+        ? typeof init.body === 'object'
+          ? JSON.stringify({ ...init.body, hash })
+          : init.body
+        : JSON.stringify({ hash });
+
+      return window.fetch(url, {
+        ...init,
+        headers: { ...init?.headers, project },
+        body: modifiedBody,
+      });
     },
   });
 
@@ -75,7 +90,7 @@ export function getModel(provider: string, model: string, env: Env) {
     case 'Google':
       return getGoogleModel(apiKey, model);
     case 'LaaS':
-      return getLaaSModel(apiKey, getLaaSProject(env), model);
+      return getLaaSModel(apiKey, getLaaSProject(env), 'test', model);
     default:
       return getOllamaModel(model);
   }
