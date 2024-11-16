@@ -15,6 +15,7 @@ import { SendButton } from './SendButton.client';
 import { useState } from 'react';
 
 import styles from './BaseChat.module.scss';
+import type { ModelInfo } from '~/utils/types';
 
 const EXAMPLE_PROMPTS = [
   { text: 'Build a todo app in React using Tailwind' },
@@ -26,7 +27,14 @@ const EXAMPLE_PROMPTS = [
 
 const providerList = [...new Set(MODEL_LIST.map((model) => model.provider))];
 
-const ModelSelector = ({ model, setModel, modelList, providerList }) => {
+interface ModelSelectorProps {
+  model: string;
+  setModel: (model: string) => void;
+  modelList: ModelInfo[];
+  providerList: string[];
+}
+
+const ModelSelector = ({ model, setModel, modelList, providerList }: ModelSelectorProps) => {
   const [provider, setProvider] = useState(DEFAULT_PROVIDER);
   return (
     <div className="mb-2">
