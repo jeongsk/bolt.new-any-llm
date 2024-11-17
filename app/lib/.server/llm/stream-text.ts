@@ -2,7 +2,7 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
-import { streamText as _streamText, generateText, convertToCoreMessages, type Attachment, type ToolInvocation } from 'ai';
+import { streamText as _streamText, generateText as _generateText, convertToCoreMessages, type Attachment, type ToolInvocation } from 'ai';
 import { getModel } from '~/lib/.server/llm/model';
 import { DEFAULT_MODEL, MODEL_LIST } from '~/utils/constants';
 import { MAX_TOKENS } from './constants';
@@ -32,6 +32,7 @@ interface Message {
 export type Messages = Message[];
 
 export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model'>;
+export type GenerateOptions = Omit<Parameters<typeof _generateText>[0], 'model'>;
 
 function extractModelFromMessage(message: Message): { model: string; content: string } {
   const modelRegex = /^\[Model: (.*?)\]\n\n/;
@@ -65,6 +66,31 @@ export function streamText(messages: Messages, env: Env, options?: StreamingOpti
   }).map(msg => msg as ConvertibleMessage);
 
   return _streamText({
+    model: getModel(currentModel, env),
+    system: getSystemPrompt(),
+    maxTokens: MAX_TOKENS,
+    messages: convertToCoreMessages(processedMessages),
+    ...options,
+  });
+}
+
+export function generateText(messages: Messages, env: Env, options?: GenerateOptions) {
+  let currentModel = DEFAULT_MODEL;
+  const processedMessages = messages.map((message) => {
+    if (message.role === 'user') {
+      const { model, content } = extractModelFromMessage(message);
+
+      if (model && MODEL_LIST.find((m) => m.name === model)) {
+        currentModel = model; // Update the current model
+      }
+
+      return { ...message, content };
+    }
+
+    return message;
+  }).map(msg => msg as ConvertibleMessage);
+
+  return _generateText({
     model: getModel(currentModel, env),
     system: getSystemPrompt(),
     maxTokens: MAX_TOKENS,
