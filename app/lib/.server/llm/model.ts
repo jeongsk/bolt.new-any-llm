@@ -50,6 +50,7 @@ export function getLaaSModel(apiKey: string, model: string) {
       const body = parseRequestBody(init?.body);
       const modifiedBody = JSON.stringify({ ...body, hash });
 
+      console.log('[LaaS]', url, modifiedBody);
       return fetch(url, {
         ...init,
         body: modifiedBody,

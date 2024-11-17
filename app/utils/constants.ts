@@ -4,7 +4,7 @@ export const WORK_DIR_NAME = 'project';
 export const WORK_DIR = `/home/${WORK_DIR_NAME}`;
 export const MODIFICATIONS_TAG_NAME = 'bolt_file_modifications';
 export const MODEL_REGEX = /^\[Model: (.*?)\]\n\n/;
-export const DEFAULT_MODEL = 'gpt-4o';
+export const DEFAULT_MODEL = 'claude-3.5-sonnet';
 export const DEFAULT_PROVIDER = 'LaaS';
 
 const staticModels: ModelInfo[] = [
@@ -31,6 +31,7 @@ const staticModels: ModelInfo[] = [
   { name: 'gpt-4', label: 'GPT-4', provider: 'OpenAI' },
   { name: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo', provider: 'OpenAI' },
   { name: 'gpt-4o', label: 'GPT-4o', provider: 'LaaS' },
+  { name: 'claude-3.5-sonnet', label: 'Claude 3.5 Sonnet', provider: 'LaaS' },
 ];
 
 export let MODEL_LIST: ModelInfo[] = [...staticModels];

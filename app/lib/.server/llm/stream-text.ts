@@ -2,7 +2,7 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
-import { streamText as _streamText, convertToCoreMessages, type Attachment, type ToolInvocation } from 'ai';
+import { streamText as _streamText, generateText, convertToCoreMessages, type Attachment, type ToolInvocation } from 'ai';
 import { getModel } from '~/lib/.server/llm/model';
 import { DEFAULT_MODEL, MODEL_LIST } from '~/utils/constants';
 import { MAX_TOKENS } from './constants';
