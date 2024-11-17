@@ -2,13 +2,36 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
-import { getAPIKey } from '~/lib/.server/llm/api-key';
 import { createOpenAI } from '@ai-sdk/openai';
+import { getAPIKey } from '~/lib/.server/llm/api-key';
 
 export function getOpenAIModel(apiKey: string, model: string) {
   const openai = createOpenAI({ apiKey });
 
   return openai(model);
+}
+
+function parseRequestBody(body?: BodyInit | Record<string, any> | null | undefined): Record<string, any> {
+  if (!body) return {};
+
+  try {
+    if (typeof body === 'string') {
+      return JSON.parse(body);
+    }
+
+    if (body instanceof FormData || body instanceof URLSearchParams) {
+      return Object.fromEntries(body);
+    }
+
+    if (typeof body === 'object' && !ArrayBuffer.isView(body)) {
+      return body as Record<string, any>;
+    }
+
+    throw new Error('Unsupported body type');
+  } catch (error) {
+    console.error('Error parsing request body:', error);
+    return {};
+  }
 }
 
 export function getLaaSModel(apiKey: string, model: string) {
@@ -24,13 +47,10 @@ export function getLaaSModel(apiKey: string, model: string) {
     fetch: (input: RequestInfo | URL, init?: RequestInit) => {
       const url = input instanceof URL ? input.toString() : input;
 
-      const modifiedBody = init?.body
-        ? typeof init.body === 'object'
-          ? JSON.stringify({ ...init.body, hash })
-          : init.body
-        : JSON.stringify({ hash });
+      const body = parseRequestBody(init?.body);
+      const modifiedBody = JSON.stringify({ ...body, hash });
 
-      return window.fetch(url, {
+      return fetch(url, {
         ...init,
         body: modifiedBody,
       });
@@ -40,7 +60,7 @@ export function getLaaSModel(apiKey: string, model: string) {
   return openai(model);
 }
 
-export function getModel(provider: string, model: string, env: Env) {
-  const apiKey = getAPIKey(env, provider);
+export function getModel(model: string, env: Env) {
+  const apiKey = getAPIKey(env);
   return getLaaSModel(apiKey, model);
 }

@@ -2,11 +2,18 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
-import { streamText as _streamText, convertToCoreMessages } from 'ai';
+import { streamText as _streamText, convertToCoreMessages, type Attachment, type ToolInvocation } from 'ai';
 import { getModel } from '~/lib/.server/llm/model';
+import { DEFAULT_MODEL, MODEL_LIST } from '~/utils/constants';
 import { MAX_TOKENS } from './constants';
 import { getSystemPrompt } from './prompts';
-import { MODEL_LIST, DEFAULT_MODEL, DEFAULT_PROVIDER } from '~/utils/constants';
+
+interface ConvertibleMessage {
+  role: "system" | "user" | "assistant" | "function" | "tool" | "data";
+  content: string;
+  toolInvocations?: ToolInvocation[];
+  experimental_attachments?: Attachment[];
+}
 
 interface ToolResult<Name extends string, Args, Result> {
   toolCallId: string;
@@ -55,20 +62,12 @@ export function streamText(messages: Messages, env: Env, options?: StreamingOpti
     }
 
     return message;
-  });
-
-  const provider = MODEL_LIST.find((model) => model.name === currentModel)?.provider || DEFAULT_PROVIDER;
+  }).map(msg => msg as ConvertibleMessage);
 
   return _streamText({
-    model: getModel(provider, currentModel, env),
+    model: getModel(currentModel, env),
     system: getSystemPrompt(),
     maxTokens: MAX_TOKENS,
-
-    /*
-     * headers: {
-     *   'anthropic-beta': 'max-tokens-3-5-sonnet-2024-07-15',
-     * },
-     */
     messages: convertToCoreMessages(processedMessages),
     ...options,
   });

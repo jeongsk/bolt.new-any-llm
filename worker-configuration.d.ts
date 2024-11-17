@@ -5,4 +5,5 @@ interface Env {
   GROQ_API_KEY: string;
   OPEN_ROUTER_API_KEY: string;
   OLLAMA_API_BASE_URL: string;
+  LAAS_API_KEY: string;
 }
